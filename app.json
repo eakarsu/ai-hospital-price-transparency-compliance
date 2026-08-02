@@ -1,0 +1,1295 @@
+{
+  "id": "ai-hospital-price-transparency-compliance",
+  "title": "ClearRate Hospital Transparency",
+  "tagline": "Machine-readable pricing integrity, executive attestation, and CMS enforcement readiness",
+  "industry": "Hospital Price Transparency",
+  "port": 4520,
+  "accent": "#0f766e",
+  "valueLabel": "Charges governed",
+  "value": "$2.1B",
+  "workflows": [
+    {
+      "id": "mrf-ingestion",
+      "title": "Machine-Readable File Ingestion",
+      "description": "Validate CMS template structure, hospital identity, file accessibility, and schema conformance.",
+      "fields": [
+        {
+          "key": "hospital",
+          "label": "Hospital",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "fileUrl",
+          "label": "MRF URL",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "templateVersion",
+          "label": "CMS Template Version",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "validationNotes",
+          "label": "Validation Notes",
+          "type": "textarea",
+          "required": false
+        }
+      ],
+      "states": [
+        "intake",
+        "analyzing",
+        "review",
+        "approved",
+        "closed"
+      ],
+      "examples": [
+        {
+          "id": "standard",
+          "label": "Fill Standard Case",
+          "values": {
+            "hospital": "Hospital STD-2026-104",
+            "fileUrl": "MRF URL STD-2026-104",
+            "templateVersion": "CMS Template Version STD-2026-104",
+            "validationNotes": "Complete: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        },
+        {
+          "id": "high-risk",
+          "label": "Fill High-Risk Case",
+          "values": {
+            "hospital": "Hospital RISK-2026-227",
+            "fileUrl": "MRF URL RISK-2026-227",
+            "templateVersion": "CMS Template Version RISK-2026-227",
+            "validationNotes": "Critical exception: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        },
+        {
+          "id": "exception",
+          "label": "Fill Exception Case",
+          "values": {
+            "hospital": "Hospital EXC-2026-319",
+            "fileUrl": "MRF URL EXC-2026-319",
+            "templateVersion": "CMS Template Version EXC-2026-319",
+            "validationNotes": "Reviewer follow-up: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        }
+      ],
+      "aiActions": [
+        {
+          "id": "assess",
+          "label": "Assess Risk & Value"
+        },
+        {
+          "id": "evidence",
+          "label": "Build Evidence Checklist"
+        },
+        {
+          "id": "plan",
+          "label": "Recommend Action Plan"
+        }
+      ]
+    },
+    {
+      "id": "allowed-amounts",
+      "title": "Allowed-Amount Percentiles",
+      "description": "Validate median, 10th percentile, 90th percentile, and observation count for algorithmic rates.",
+      "fields": [
+        {
+          "key": "payer",
+          "label": "Payer",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "billingCode",
+          "label": "Billing Code",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "medianAllowed",
+          "label": "Median Allowed Amount",
+          "type": "currency",
+          "required": true
+        },
+        {
+          "key": "observationCount",
+          "label": "Allowed-Amount Count",
+          "type": "number",
+          "required": false
+        }
+      ],
+      "states": [
+        "intake",
+        "analyzing",
+        "review",
+        "approved",
+        "closed"
+      ],
+      "examples": [
+        {
+          "id": "standard",
+          "label": "Fill Standard Case",
+          "values": {
+            "payer": "Payer STD-2026-104",
+            "billingCode": "Billing Code STD-2026-104",
+            "medianAllowed": 285000,
+            "observationCount": 125
+          }
+        },
+        {
+          "id": "high-risk",
+          "label": "Fill High-Risk Case",
+          "values": {
+            "payer": "Payer RISK-2026-227",
+            "billingCode": "Billing Code RISK-2026-227",
+            "medianAllowed": 875000,
+            "observationCount": 975
+          }
+        },
+        {
+          "id": "exception",
+          "label": "Fill Exception Case",
+          "values": {
+            "payer": "Payer EXC-2026-319",
+            "billingCode": "Billing Code EXC-2026-319",
+            "medianAllowed": 142500,
+            "observationCount": 41
+          }
+        }
+      ],
+      "aiActions": [
+        {
+          "id": "assess",
+          "label": "Assess Risk & Value"
+        },
+        {
+          "id": "evidence",
+          "label": "Build Evidence Checklist"
+        },
+        {
+          "id": "plan",
+          "label": "Recommend Action Plan"
+        }
+      ]
+    },
+    {
+      "id": "rate-completeness",
+      "title": "Payer Rate Completeness",
+      "description": "Detect missing plans, billing-code gaps, unsupported rate types, and incomplete service settings.",
+      "fields": [
+        {
+          "key": "payer",
+          "label": "Payer",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "plan",
+          "label": "Plan",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "expectedCodes",
+          "label": "Expected Code Count",
+          "type": "number",
+          "required": true
+        },
+        {
+          "key": "publishedCodes",
+          "label": "Published Code Count",
+          "type": "number",
+          "required": false
+        }
+      ],
+      "states": [
+        "intake",
+        "analyzing",
+        "review",
+        "approved",
+        "closed"
+      ],
+      "examples": [
+        {
+          "id": "standard",
+          "label": "Fill Standard Case",
+          "values": {
+            "payer": "Payer STD-2026-104",
+            "plan": "Plan STD-2026-104",
+            "expectedCodes": 125,
+            "publishedCodes": 125
+          }
+        },
+        {
+          "id": "high-risk",
+          "label": "Fill High-Risk Case",
+          "values": {
+            "payer": "Payer RISK-2026-227",
+            "plan": "Plan RISK-2026-227",
+            "expectedCodes": 975,
+            "publishedCodes": 975
+          }
+        },
+        {
+          "id": "exception",
+          "label": "Fill Exception Case",
+          "values": {
+            "payer": "Payer EXC-2026-319",
+            "plan": "Plan EXC-2026-319",
+            "expectedCodes": 41,
+            "publishedCodes": 41
+          }
+        }
+      ],
+      "aiActions": [
+        {
+          "id": "assess",
+          "label": "Assess Risk & Value"
+        },
+        {
+          "id": "evidence",
+          "label": "Build Evidence Checklist"
+        },
+        {
+          "id": "plan",
+          "label": "Recommend Action Plan"
+        }
+      ]
+    },
+    {
+      "id": "code-normalization",
+      "title": "Billing Code Normalization",
+      "description": "Map CPT, HCPCS, DRG, NDC, and revenue codes to descriptions and service settings.",
+      "fields": [
+        {
+          "key": "codeType",
+          "label": "Code Type",
+          "type": "select",
+          "required": true,
+          "options": [
+            "CPT",
+            "HCPCS",
+            "MS-DRG",
+            "NDC",
+            "Revenue Code"
+          ]
+        },
+        {
+          "key": "billingCode",
+          "label": "Billing Code",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "serviceSetting",
+          "label": "Service Setting",
+          "type": "text",
+          "required": false
+        }
+      ],
+      "states": [
+        "intake",
+        "analyzing",
+        "review",
+        "approved",
+        "closed"
+      ],
+      "examples": [
+        {
+          "id": "standard",
+          "label": "Fill Standard Case",
+          "values": {
+            "codeType": "CPT",
+            "billingCode": "Billing Code STD-2026-104",
+            "description": "Description STD-2026-104",
+            "serviceSetting": "Service Setting STD-2026-104"
+          }
+        },
+        {
+          "id": "high-risk",
+          "label": "Fill High-Risk Case",
+          "values": {
+            "codeType": "CPT",
+            "billingCode": "Billing Code RISK-2026-227",
+            "description": "Description RISK-2026-227",
+            "serviceSetting": "Service Setting RISK-2026-227"
+          }
+        },
+        {
+          "id": "exception",
+          "label": "Fill Exception Case",
+          "values": {
+            "codeType": "CPT",
+            "billingCode": "Billing Code EXC-2026-319",
+            "description": "Description EXC-2026-319",
+            "serviceSetting": "Service Setting EXC-2026-319"
+          }
+        }
+      ],
+      "aiActions": [
+        {
+          "id": "assess",
+          "label": "Assess Risk & Value"
+        },
+        {
+          "id": "evidence",
+          "label": "Build Evidence Checklist"
+        },
+        {
+          "id": "plan",
+          "label": "Recommend Action Plan"
+        }
+      ]
+    },
+    {
+      "id": "attestation",
+      "title": "Executive Attestation Control",
+      "description": "Prepare evidence supporting the authorized official's true, accurate, and complete attestation.",
+      "fields": [
+        {
+          "key": "official",
+          "label": "Authorized Official",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "reportingPeriod",
+          "label": "Reporting Period",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "exceptionCount",
+          "label": "Open Exception Count",
+          "type": "number",
+          "required": true
+        },
+        {
+          "key": "attestationBasis",
+          "label": "Attestation Basis",
+          "type": "textarea",
+          "required": false
+        }
+      ],
+      "states": [
+        "intake",
+        "analyzing",
+        "review",
+        "approved",
+        "closed"
+      ],
+      "examples": [
+        {
+          "id": "standard",
+          "label": "Fill Standard Case",
+          "values": {
+            "official": "Authorized Official STD-2026-104",
+            "reportingPeriod": "Reporting Period STD-2026-104",
+            "exceptionCount": 125,
+            "attestationBasis": "Complete: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        },
+        {
+          "id": "high-risk",
+          "label": "Fill High-Risk Case",
+          "values": {
+            "official": "Authorized Official RISK-2026-227",
+            "reportingPeriod": "Reporting Period RISK-2026-227",
+            "exceptionCount": 975,
+            "attestationBasis": "Critical exception: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        },
+        {
+          "id": "exception",
+          "label": "Fill Exception Case",
+          "values": {
+            "official": "Authorized Official EXC-2026-319",
+            "reportingPeriod": "Reporting Period EXC-2026-319",
+            "exceptionCount": 41,
+            "attestationBasis": "Reviewer follow-up: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        }
+      ],
+      "aiActions": [
+        {
+          "id": "assess",
+          "label": "Assess Risk & Value"
+        },
+        {
+          "id": "evidence",
+          "label": "Build Evidence Checklist"
+        },
+        {
+          "id": "plan",
+          "label": "Recommend Action Plan"
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "title": "Public Accessibility Monitor",
+      "description": "Test URL availability, robots restrictions, download performance, naming, and update cadence.",
+      "fields": [
+        {
+          "key": "fileUrl",
+          "label": "Public File URL",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "httpStatus",
+          "label": "HTTP Status",
+          "type": "number",
+          "required": true
+        },
+        {
+          "key": "downloadSeconds",
+          "label": "Download Seconds",
+          "type": "number",
+          "required": true
+        },
+        {
+          "key": "accessNotes",
+          "label": "Accessibility Notes",
+          "type": "textarea",
+          "required": false
+        }
+      ],
+      "states": [
+        "intake",
+        "analyzing",
+        "review",
+        "approved",
+        "closed"
+      ],
+      "examples": [
+        {
+          "id": "standard",
+          "label": "Fill Standard Case",
+          "values": {
+            "fileUrl": "Public File URL STD-2026-104",
+            "httpStatus": 125,
+            "downloadSeconds": 125,
+            "accessNotes": "Complete: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        },
+        {
+          "id": "high-risk",
+          "label": "Fill High-Risk Case",
+          "values": {
+            "fileUrl": "Public File URL RISK-2026-227",
+            "httpStatus": 975,
+            "downloadSeconds": 975,
+            "accessNotes": "Critical exception: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        },
+        {
+          "id": "exception",
+          "label": "Fill Exception Case",
+          "values": {
+            "fileUrl": "Public File URL EXC-2026-319",
+            "httpStatus": 41,
+            "downloadSeconds": 41,
+            "accessNotes": "Reviewer follow-up: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        }
+      ],
+      "aiActions": [
+        {
+          "id": "assess",
+          "label": "Assess Risk & Value"
+        },
+        {
+          "id": "evidence",
+          "label": "Build Evidence Checklist"
+        },
+        {
+          "id": "plan",
+          "label": "Recommend Action Plan"
+        }
+      ]
+    },
+    {
+      "id": "enforcement",
+      "title": "CMS Enforcement Response",
+      "description": "Manage warning notices, corrective action plans, evidence responses, deadlines, and closure.",
+      "fields": [
+        {
+          "key": "noticeId",
+          "label": "CMS Notice ID",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "noticeDate",
+          "label": "Notice Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "key": "responseDue",
+          "label": "Response Due",
+          "type": "date",
+          "required": true
+        },
+        {
+          "key": "responsePlan",
+          "label": "Corrective Action Plan",
+          "type": "textarea",
+          "required": false
+        }
+      ],
+      "states": [
+        "intake",
+        "analyzing",
+        "review",
+        "approved",
+        "closed"
+      ],
+      "examples": [
+        {
+          "id": "standard",
+          "label": "Fill Standard Case",
+          "values": {
+            "noticeId": "CMS Notice ID STD-2026-104",
+            "noticeDate": "2026-09-08",
+            "responseDue": "2026-09-08",
+            "responsePlan": "Complete: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        },
+        {
+          "id": "high-risk",
+          "label": "Fill High-Risk Case",
+          "values": {
+            "noticeId": "CMS Notice ID RISK-2026-227",
+            "noticeDate": "2026-08-19",
+            "responseDue": "2026-08-19",
+            "responsePlan": "Critical exception: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        },
+        {
+          "id": "exception",
+          "label": "Fill Exception Case",
+          "values": {
+            "noticeId": "CMS Notice ID EXC-2026-319",
+            "noticeDate": "2026-08-10",
+            "responseDue": "2026-08-10",
+            "responsePlan": "Reviewer follow-up: source evidence, financial impact, control context, and documented reviewer rationale are available for analysis."
+          }
+        }
+      ],
+      "aiActions": [
+        {
+          "id": "assess",
+          "label": "Assess Risk & Value"
+        },
+        {
+          "id": "evidence",
+          "label": "Build Evidence Checklist"
+        },
+        {
+          "id": "plan",
+          "label": "Recommend Action Plan"
+        }
+      ]
+    },
+    {
+      "id": "benchmarking",
+      "title": "Contract Rate Benchmarking",
+      "description": "Compare payer-specific negotiated charges and allowed amounts across facilities and markets.",
+      "fields": [
+        {
+          "key": "market",
+          "label": "Market",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "billingCode",
+          "label": "Billing Code",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "hospitalRate",
+          "label": "Hospital Rate",
+          "type": "currency",
+          "required": true
+        },
+        {
+          "key": "peerMedian",
+          "label": "Peer Median",
+          "type": "currency",
+          "required": false
+        }
+      ],
+      "states": [
+        "intake",
+        "analyzing",
+        "review",
+        "approved",
+        "closed"
+      ],
+      "examples": [
+        {
+          "id": "standard",
+          "label": "Fill Standard Case",
+          "values": {
+            "market": "Market STD-2026-104",
+            "billingCode": "Billing Code STD-2026-104",
+            "hospitalRate": 285000,
+            "peerMedian": 285000
+          }
+        },
+        {
+          "id": "high-risk",
+          "label": "Fill High-Risk Case",
+          "values": {
+            "market": "Market RISK-2026-227",
+            "billingCode": "Billing Code RISK-2026-227",
+            "hospitalRate": 875000,
+            "peerMedian": 875000
+          }
+        },
+        {
+          "id": "exception",
+          "label": "Fill Exception Case",
+          "values": {
+            "market": "Market EXC-2026-319",
+            "billingCode": "Billing Code EXC-2026-319",
+            "hospitalRate": 142500,
+            "peerMedian": 142500
+          }
+        }
+      ],
+      "aiActions": [
+        {
+          "id": "assess",
+          "label": "Assess Risk & Value"
+        },
+        {
+          "id": "evidence",
+          "label": "Build Evidence Checklist"
+        },
+        {
+          "id": "plan",
+          "label": "Recommend Action Plan"
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "mrf-ingestion",
+      "title": "Machine-Readable File Ingestion Register",
+      "description": "Operational records, ownership, status, financial value, and evidence for machine-readable file ingestion.",
+      "table": "op_mrf_ingestion",
+      "columns": [
+        {
+          "key": "hospital",
+          "label": "Hospital",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_hospital"
+        },
+        {
+          "key": "fileUrl",
+          "label": "MRF URL",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_fileUrl"
+        },
+        {
+          "key": "templateVersion",
+          "label": "CMS Template Version",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_templateVersion"
+        },
+        {
+          "key": "validationNotes",
+          "label": "Validation Notes",
+          "type": "textarea",
+          "required": false,
+          "dbKey": "data_validationNotes"
+        }
+      ]
+    },
+    {
+      "id": "allowed-amounts",
+      "title": "Allowed-Amount Percentiles Register",
+      "description": "Operational records, ownership, status, financial value, and evidence for allowed-amount percentiles.",
+      "table": "op_allowed_amounts",
+      "columns": [
+        {
+          "key": "payer",
+          "label": "Payer",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_payer"
+        },
+        {
+          "key": "billingCode",
+          "label": "Billing Code",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_billingCode"
+        },
+        {
+          "key": "medianAllowed",
+          "label": "Median Allowed Amount",
+          "type": "currency",
+          "required": true,
+          "dbKey": "data_medianAllowed"
+        },
+        {
+          "key": "observationCount",
+          "label": "Allowed-Amount Count",
+          "type": "number",
+          "required": false,
+          "dbKey": "data_observationCount"
+        }
+      ]
+    },
+    {
+      "id": "rate-completeness",
+      "title": "Payer Rate Completeness Register",
+      "description": "Operational records, ownership, status, financial value, and evidence for payer rate completeness.",
+      "table": "op_rate_completeness",
+      "columns": [
+        {
+          "key": "payer",
+          "label": "Payer",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_payer"
+        },
+        {
+          "key": "plan",
+          "label": "Plan",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_plan"
+        },
+        {
+          "key": "expectedCodes",
+          "label": "Expected Code Count",
+          "type": "number",
+          "required": true,
+          "dbKey": "data_expectedCodes"
+        },
+        {
+          "key": "publishedCodes",
+          "label": "Published Code Count",
+          "type": "number",
+          "required": false,
+          "dbKey": "data_publishedCodes"
+        }
+      ]
+    },
+    {
+      "id": "code-normalization",
+      "title": "Billing Code Normalization Register",
+      "description": "Operational records, ownership, status, financial value, and evidence for billing code normalization.",
+      "table": "op_code_normalization",
+      "columns": [
+        {
+          "key": "codeType",
+          "label": "Code Type",
+          "type": "select",
+          "required": true,
+          "options": [
+            "CPT",
+            "HCPCS",
+            "MS-DRG",
+            "NDC",
+            "Revenue Code"
+          ],
+          "dbKey": "data_codeType"
+        },
+        {
+          "key": "billingCode",
+          "label": "Billing Code",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_billingCode"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_description"
+        },
+        {
+          "key": "serviceSetting",
+          "label": "Service Setting",
+          "type": "text",
+          "required": false,
+          "dbKey": "data_serviceSetting"
+        }
+      ]
+    },
+    {
+      "id": "attestation",
+      "title": "Executive Attestation Control Register",
+      "description": "Operational records, ownership, status, financial value, and evidence for executive attestation control.",
+      "table": "op_attestation",
+      "columns": [
+        {
+          "key": "official",
+          "label": "Authorized Official",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_official"
+        },
+        {
+          "key": "reportingPeriod",
+          "label": "Reporting Period",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_reportingPeriod"
+        },
+        {
+          "key": "exceptionCount",
+          "label": "Open Exception Count",
+          "type": "number",
+          "required": true,
+          "dbKey": "data_exceptionCount"
+        },
+        {
+          "key": "attestationBasis",
+          "label": "Attestation Basis",
+          "type": "textarea",
+          "required": false,
+          "dbKey": "data_attestationBasis"
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "title": "Public Accessibility Monitor Register",
+      "description": "Operational records, ownership, status, financial value, and evidence for public accessibility monitor.",
+      "table": "op_accessibility",
+      "columns": [
+        {
+          "key": "fileUrl",
+          "label": "Public File URL",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_fileUrl"
+        },
+        {
+          "key": "httpStatus",
+          "label": "HTTP Status",
+          "type": "number",
+          "required": true,
+          "dbKey": "data_httpStatus"
+        },
+        {
+          "key": "downloadSeconds",
+          "label": "Download Seconds",
+          "type": "number",
+          "required": true,
+          "dbKey": "data_downloadSeconds"
+        },
+        {
+          "key": "accessNotes",
+          "label": "Accessibility Notes",
+          "type": "textarea",
+          "required": false,
+          "dbKey": "data_accessNotes"
+        }
+      ]
+    },
+    {
+      "id": "enforcement",
+      "title": "CMS Enforcement Response Register",
+      "description": "Operational records, ownership, status, financial value, and evidence for cms enforcement response.",
+      "table": "op_enforcement",
+      "columns": [
+        {
+          "key": "noticeId",
+          "label": "CMS Notice ID",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_noticeId"
+        },
+        {
+          "key": "noticeDate",
+          "label": "Notice Date",
+          "type": "date",
+          "required": true,
+          "dbKey": "data_noticeDate"
+        },
+        {
+          "key": "responseDue",
+          "label": "Response Due",
+          "type": "date",
+          "required": true,
+          "dbKey": "data_responseDue"
+        },
+        {
+          "key": "responsePlan",
+          "label": "Corrective Action Plan",
+          "type": "textarea",
+          "required": false,
+          "dbKey": "data_responsePlan"
+        }
+      ]
+    },
+    {
+      "id": "benchmarking",
+      "title": "Contract Rate Benchmarking Register",
+      "description": "Operational records, ownership, status, financial value, and evidence for contract rate benchmarking.",
+      "table": "op_benchmarking",
+      "columns": [
+        {
+          "key": "market",
+          "label": "Market",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_market"
+        },
+        {
+          "key": "billingCode",
+          "label": "Billing Code",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_billingCode"
+        },
+        {
+          "key": "hospitalRate",
+          "label": "Hospital Rate",
+          "type": "currency",
+          "required": true,
+          "dbKey": "data_hospitalRate"
+        },
+        {
+          "key": "peerMedian",
+          "label": "Peer Median",
+          "type": "currency",
+          "required": false,
+          "dbKey": "data_peerMedian"
+        }
+      ]
+    },
+    {
+      "id": "hospital-registry",
+      "title": "Hospital & Location Registry",
+      "description": "CCNs, locations, websites, officials, and reporting ownership.",
+      "table": "op_hospital_registry",
+      "columns": [
+        {
+          "key": "hospital",
+          "label": "Hospital",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_hospital"
+        },
+        {
+          "key": "ccn",
+          "label": "CCN",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_ccn"
+        },
+        {
+          "key": "location",
+          "label": "Location",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_location"
+        },
+        {
+          "key": "official",
+          "label": "Authorized Official",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_official"
+        }
+      ]
+    },
+    {
+      "id": "payer-plan-master",
+      "title": "Payer & Plan Master",
+      "description": "Payer, plan, market, product, network, and rate-file expectations.",
+      "table": "op_payer_plan_master",
+      "columns": [
+        {
+          "key": "payer",
+          "label": "Payer",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_payer"
+        },
+        {
+          "key": "plan",
+          "label": "Plan",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_plan"
+        },
+        {
+          "key": "market",
+          "label": "Market",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_market"
+        },
+        {
+          "key": "product",
+          "label": "Product",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_product"
+        }
+      ]
+    },
+    {
+      "id": "billing-code-master",
+      "title": "Billing Code Dictionary",
+      "description": "Code systems, descriptions, settings, drug units, and crosswalks.",
+      "table": "op_billing_code_master",
+      "columns": [
+        {
+          "key": "codeType",
+          "label": "Code Type",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_codeType"
+        },
+        {
+          "key": "billingCode",
+          "label": "Billing Code",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_billingCode"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_description"
+        },
+        {
+          "key": "serviceSetting",
+          "label": "Service Setting",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_serviceSetting"
+        }
+      ]
+    },
+    {
+      "id": "cms-control-library",
+      "title": "CMS Requirement Library",
+      "description": "Requirement, effective date, test procedure, owner, and evidence standard.",
+      "table": "op_cms_control_library",
+      "columns": [
+        {
+          "key": "requirement",
+          "label": "Requirement",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_requirement"
+        },
+        {
+          "key": "effectiveDate",
+          "label": "Effective Date",
+          "type": "date",
+          "required": true,
+          "dbKey": "data_effectiveDate"
+        },
+        {
+          "key": "testProcedure",
+          "label": "Test Procedure",
+          "type": "text",
+          "required": true,
+          "dbKey": "data_testProcedure"
+        },
+        {
+          "key": "evidenceStandard",
+          "label": "Evidence Standard",
+          "type": "textarea",
+          "required": true,
+          "dbKey": "data_evidenceStandard"
+        }
+      ]
+    }
+  ],
+  "domainProduct": {
+    "home": "Hospital Transparency Control Room",
+    "context": "A compliance operating system for CMS machine-readable files, payer-rate completeness, allowed-amount statistics, executive attestation, and enforcement response.",
+    "features": [
+      {
+        "id": "file-certification",
+        "title": "MRF Certification Pipeline",
+        "description": "Ingest, validate, remediate, and certify every hospital machine-readable file before publication.",
+        "view": "evidence",
+        "modules": [
+          "mrf-ingestion",
+          "hospital-registry"
+        ],
+        "actions": [
+          {
+            "id": "accept-schema",
+            "label": "Accept CMS Schema",
+            "nextStatus": "Approved",
+            "auditDetail": "Accepted CMS template and required hospital identity fields."
+          },
+          {
+            "id": "reject-file",
+            "label": "Reject Nonconforming File",
+            "nextStatus": "Investigating",
+            "auditDetail": "Rejected file for structural or accessibility remediation."
+          }
+        ]
+      },
+      {
+        "id": "rate-integrity",
+        "title": "Negotiated Rate Integrity",
+        "description": "Reconcile payer plans, billing codes, service settings, negotiated charges, and missing-rate populations.",
+        "view": "reconciliation",
+        "modules": [
+          "rate-completeness",
+          "payer-plan-master"
+        ],
+        "actions": [
+          {
+            "id": "approve-completeness",
+            "label": "Approve Rate Completeness",
+            "nextStatus": "Approved",
+            "auditDetail": "Approved payer-plan and billing-code population completeness."
+          },
+          {
+            "id": "open-rate-gap",
+            "label": "Open Missing-Rate Case",
+            "nextStatus": "Investigating",
+            "auditDetail": "Opened a missing or unsupported payer-rate exception."
+          }
+        ]
+      },
+      {
+        "id": "allowed-statistics",
+        "title": "Allowed-Amount Statistics Control",
+        "description": "Validate median, 10th and 90th percentiles and observation counts for algorithm-based rates.",
+        "view": "control",
+        "modules": [
+          "allowed-amounts",
+          "billing-code-master"
+        ],
+        "actions": [
+          {
+            "id": "validate-statistics",
+            "label": "Validate Allowed Statistics",
+            "nextStatus": "Approved",
+            "auditDetail": "Validated allowed-amount percentile and observation-count evidence."
+          },
+          {
+            "id": "quarantine-statistics",
+            "label": "Quarantine Invalid Statistics",
+            "nextStatus": "Review",
+            "auditDetail": "Quarantined invalid or unsupported allowed-amount statistics."
+          }
+        ]
+      },
+      {
+        "id": "executive-attestation",
+        "title": "Executive Attestation",
+        "description": "Aggregate unresolved exceptions and evidence supporting the authorized official's certification.",
+        "view": "board",
+        "modules": [
+          "attestation",
+          "cms-control-library"
+        ],
+        "actions": [
+          {
+            "id": "release-attestation",
+            "label": "Release for Signature",
+            "nextStatus": "Review",
+            "auditDetail": "Released complete attestation evidence for authorized signature."
+          },
+          {
+            "id": "block-attestation",
+            "label": "Block Attestation",
+            "nextStatus": "Investigating",
+            "auditDetail": "Blocked attestation because material exceptions remain open."
+          }
+        ]
+      },
+      {
+        "id": "cms-enforcement",
+        "title": "CMS Enforcement & CAP",
+        "description": "Control notices, corrective action plans, deadlines, evidence submissions, and closure receipts.",
+        "view": "deadline",
+        "modules": [
+          "enforcement",
+          "accessibility"
+        ],
+        "actions": [
+          {
+            "id": "submit-cap",
+            "label": "Submit Corrective Action Plan",
+            "nextStatus": "Review",
+            "auditDetail": "Submitted corrective action plan and supporting evidence."
+          },
+          {
+            "id": "close-enforcement",
+            "label": "Close Enforcement Matter",
+            "nextStatus": "Approved",
+            "auditDetail": "Closed the enforcement matter after CMS response validation."
+          }
+        ]
+      }
+    ]
+  },
+  "integrations": [
+    {
+      "id": "integration-1",
+      "name": "CMS HPT validator",
+      "category": "Domain data source",
+      "mode": "Read-only demo connector"
+    },
+    {
+      "id": "integration-2",
+      "name": "Hospital contract repository",
+      "category": "Domain data source",
+      "mode": "Read-only demo connector"
+    },
+    {
+      "id": "integration-3",
+      "name": "Chargemaster",
+      "category": "Domain data source",
+      "mode": "Read-only demo connector"
+    },
+    {
+      "id": "integration-4",
+      "name": "Payer contract system",
+      "category": "Domain data source",
+      "mode": "Read-only demo connector"
+    },
+    {
+      "id": "integration-5",
+      "name": "Public website monitor",
+      "category": "Domain data source",
+      "mode": "Read-only demo connector"
+    }
+  ],
+  "featureCount": 40,
+  "seededRecords": 300,
+  "demoUsers": 3,
+  "apiPort": 5520,
+  "dbName": "profit_ai_hospital_price_transparency_compliance"
+}
