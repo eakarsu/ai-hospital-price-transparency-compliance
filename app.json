@@ -7,6 +7,15 @@
   "accent": "#0f766e",
   "valueLabel": "Charges governed",
   "value": "$2.1B",
+  "commercialExtension": {
+    "title": "MRF Compliance & Attestation Lab",
+    "summary": "Quantify governed charge exposure and stage automated MRF, remittance-statistics, accessibility, and attestation controls.",
+    "baselineLabel": "Governed charge value", "volumeLabel": "Published rate records", "unitValueLabel": "Average represented charge", "opportunityRateLabel": "Defect / exception rate", "captureRateLabel": "Expected correction rate",
+    "defaults": { "volume": 350000, "unitValue": 3800, "opportunityRate": 4, "captureRate": 80 },
+    "pricing": "Annual subscription per hospital facility with implementation fees for MRF and remittance pipelines.",
+    "milestones": ["Ingest and certify one facility MRF", "Recalculate allowed-amount statistics from source remits", "Continuously monitor public accessibility", "Release executive attestation evidence"],
+    "connectors": [{"name":"Patient accounting system","status":"Pilot","purpose":"Charges, codes, settings, and payer-plan references","evidence":"Source version, facility identity, and reconciliation totals"},{"name":"EDI 835 repository","status":"Planned","purpose":"Median and percentile allowed amounts","evidence":"Lookback period, observation count, and calculation lineage"},{"name":"Public MRF monitor","status":"Planned","purpose":"Availability, naming, schema, and download checks","evidence":"Timestamped HTTP and validator receipts"}]
+  },
   "workflows": [
     {
       "id": "mrf-ingestion",
