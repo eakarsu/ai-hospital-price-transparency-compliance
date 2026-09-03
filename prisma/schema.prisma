@@ -1,0 +1,214 @@
+// Generated schema — modeled after beautyhqio conventions.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(ANALYST)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  ANALYST
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actorName String?
+  action    String
+  entity    String
+  entityId  String?
+  detail    String?
+  createdAt DateTime @default(now())
+}
+
+model Hospital {
+  id        String   @id @default(cuid())
+  name String
+  cmsNumber String
+  system String
+  state String
+  status String
+  bedCount Int
+  fileUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  machineReadableFiles MachineReadableFile[]
+  rateEntrys RateEntry[]
+  negotiatedRateTests NegotiatedRateTest[]
+  percentileChecks PercentileCheck[]
+  codeNormalizations CodeNormalization[]
+  accessibilityChecks AccessibilityCheck[]
+  attestations Attestation[]
+  cmsWarnings CmsWarning[]
+  correctiveActions CorrectiveAction[]
+  benchmarkReports BenchmarkReport[]
+  validationRuns ValidationRun[]
+}
+
+model MachineReadableFile {
+  id        String   @id @default(cuid())
+  fileName String
+  fileUrl String
+  format String
+  sizeMb String
+  status String
+  publishedAt DateTime?
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RateEntry {
+  id        String   @id @default(cuid())
+  code String
+  codeType String
+  description String
+  payer String
+  negotiatedRate Float
+  setting String
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NegotiatedRateTest {
+  id        String   @id @default(cuid())
+  testName String
+  payer String
+  expectedCount Int
+  foundCount Int
+  result String
+  runAt DateTime?
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PercentileCheck {
+  id        String   @id @default(cuid())
+  payer String
+  code String
+  p10Amount Float
+  medianAmount Float
+  p90Amount Float
+  result String
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CodeNormalization {
+  id        String   @id @default(cuid())
+  rawCode String
+  normalizedCode String
+  codeSystem String
+  status String
+  issue String?
+  processedAt DateTime?
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AccessibilityCheck {
+  id        String   @id @default(cuid())
+  url String
+  checkType String
+  result String
+  httpStatus Int
+  checkedAt DateTime?
+  blocker String?
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attestation {
+  id        String   @id @default(cuid())
+  period String
+  executive String
+  statement String
+  status String
+  signedAt DateTime?
+  ipAddress String?
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CmsWarning {
+  id        String   @id @default(cuid())
+  reference String
+  violation String
+  severity String
+  status String
+  receivedAt DateTime?
+  deadline DateTime?
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CorrectiveAction {
+  id        String   @id @default(cuid())
+  warningRef String
+  action String
+  owner String
+  status String
+  dueDate DateTime?
+  evidenceRef String?
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BenchmarkReport {
+  id        String   @id @default(cuid())
+  period String
+  payer String
+  codeSet String
+  avgRate Float
+  peerDeltaPct Float
+  status String
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ValidationRun {
+  id        String   @id @default(cuid())
+  runType String
+  checksPassed Int
+  checksFailed Int
+  status String
+  startedAt DateTime?
+  triggeredBy String
+  hospitalId String?
+  hospital Hospital? @relation(fields: [hospitalId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
