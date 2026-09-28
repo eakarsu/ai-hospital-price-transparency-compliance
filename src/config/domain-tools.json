@@ -1,0 +1,51 @@
+[
+  {
+    "id": "statistics",
+    "title": "Observed amount statistics",
+    "description": "Compute median and percentiles from source observations using a documented interpolation method.",
+    "example": {
+      "values": [
+        100,
+        150,
+        200,
+        350,
+        400
+      ]
+    }
+  },
+  {
+    "id": "reconcile",
+    "title": "Ledger reconciliation",
+    "description": "Compare debits and credits using integer minor units in a single currency.",
+    "example": {
+      "currency": "USD",
+      "debits": [
+        {
+          "reference": "debit-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "credits": [
+        {
+          "reference": "credit-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ]
+    }
+  },
+  {
+    "id": "evidence-check",
+    "title": "Evidence completeness checklist",
+    "description": "Check whether supplied requirements have supporting text. Presence does not prove truth or compliance.",
+    "example": {
+      "requirements": [
+        {
+          "requirement": "Signed source record",
+          "evidence": "Source record reference and reviewer notes"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,101 @@
+{
+  "file-validate": [
+    {
+      "id": "example-1",
+      "label": "Missing identifiers",
+      "values": {
+        "fileUrl": "https://hospital.example/mrf.json",
+        "format": "JSON",
+        "sizeMb": "2.4",
+        "validatorResult": "Example CMS validator output: missing hospital_name and type_2_npi.",
+        "knownIssues": "Two required header properties missing; upload actual bytes to the CMS tool for validation."
+      }
+    },
+    {
+      "id": "example-2",
+      "label": "Malformed charge row",
+      "values": {
+        "fileUrl": "https://hospital.example/mrf.csv",
+        "format": "CSV",
+        "sizeMb": "12.8",
+        "validatorResult": "Example validator output: row 18 has an invalid numeric charge field.",
+        "knownIssues": "One charge cell contains text; no conclusion about published price accuracy."
+      }
+    },
+    {
+      "id": "example-3",
+      "label": "Reviewed structure",
+      "values": {
+        "fileUrl": "https://hospital.example/reviewed-mrf.json",
+        "format": "JSON",
+        "sizeMb": "8.1",
+        "validatorResult": "Example reviewed result: structural checks passed under the selected schema; obtain the real saved result.",
+        "knownIssues": "No structural errors in this fictional scenario; accessibility and price accuracy not assessed."
+      }
+    }
+  ],
+  "rate-compare": [
+    {
+      "id": "example-1",
+      "label": "Imaging comparison",
+      "values": {
+        "code": "Example CPT 70551",
+        "rate": "450 USD",
+        "peerRates": "380, 420, 460, 500 USD; same service and setting assumed",
+        "payer": "Example commercial payer A"
+      }
+    },
+    {
+      "id": "example-2",
+      "label": "Outlier review",
+      "values": {
+        "code": "Example CPT 73721",
+        "rate": "1250 USD",
+        "peerRates": "450, 500, 650, 700 USD; confirm modifiers and facility setting",
+        "payer": "Example commercial payer B"
+      }
+    },
+    {
+      "id": "example-3",
+      "label": "Small peer sample",
+      "values": {
+        "code": "Example CPT 80053",
+        "rate": "32 USD",
+        "peerRates": "28, 40 USD; small sample with unknown contract mix",
+        "payer": "Example commercial payer C"
+      }
+    }
+  ],
+  "attestation-draft": [
+    {
+      "id": "example-1",
+      "label": "Quarterly review",
+      "values": {
+        "period": "2026 Q3",
+        "executive": "Example compliance executive",
+        "validationSummary": "File structure reviewed; owner sign-off and price-source checks pending.",
+        "deficiencies": "Missing payer identifier on two rows; corrective action owner assigned."
+      }
+    },
+    {
+      "id": "example-2",
+      "label": "Corrective action",
+      "values": {
+        "period": "2026-08 remediation cycle",
+        "executive": "Example finance director",
+        "validationSummary": "Revised MRF uploaded; structural validation rerun is pending.",
+        "deficiencies": "Three invalid charge fields remain open; do not attest to completion."
+      }
+    },
+    {
+      "id": "example-3",
+      "label": "Annual refresh",
+      "values": {
+        "period": "2026 annual refresh",
+        "executive": "Example authorized officer",
+        "validationSummary": "Fictional review packet contains validation results and documented methodology.",
+        "deficiencies": "External accessibility and charge accuracy still require independent review."
+      }
+    }
+  ]
+}

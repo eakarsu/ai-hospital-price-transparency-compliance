@@ -124,21 +124,21 @@ export const entities: Record<string, EntityConfig> = {
 export const workflows: WorkflowConfig[] = [
   {
     slug: "file-validate",
-    title: "MRF Validator",
+    title: "Draft: MRF Validator",
     description: "Validate a machine-readable file against CMS schema.",
-    prompt: "You are a CMS price transparency compliance analyst. Validate the described machine-readable file against the hospital price transparency schema requirements, listing structural defects.",
-    fields: ["fileUrl", "format", "sizeMb", "knownIssues"],
+    prompt: "Explain an attached CMS validator result and its source file hash. A URL or description alone is not file validation. Direct users to the CMS file validator under Domain tools if no validator result is supplied.",
+    fields: ["fileUrl", "format", "sizeMb", "validatorResult", "knownIssues"],
   },
   {
     slug: "rate-compare",
-    title: "Rate Benchmark Analyst",
+    title: "Draft: Rate Benchmark Analyst",
     description: "Compare negotiated rates across peer hospitals.",
     prompt: "You are a managed-care analyst. Compare the hospital's negotiated rate for the code to peer benchmarks and flag outlier variances with likely causes.",
     fields: ["code", "rate", "peerRates", "payer"],
   },
   {
     slug: "attestation-draft",
-    title: "Attestation Drafter",
+    title: "Draft: Attestation Drafter",
     description: "Draft the executive accuracy attestation.",
     prompt: "You are a compliance officer. Draft a hospital price transparency executive attestation reflecting validation results, deficiencies, and remediation.",
     fields: ["period", "executive", "validationSummary", "deficiencies"],

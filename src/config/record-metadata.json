@@ -1,0 +1,549 @@
+{
+  "Hospital": {
+    "name": "Hospital",
+    "fields": [
+      {
+        "name": "name",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "cmsNumber",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "system",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "state",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "bedCount",
+        "kind": "number",
+        "required": true,
+        "integer": true,
+        "min": 0
+      },
+      {
+        "name": "fileUrl",
+        "kind": "string",
+        "required": true
+      }
+    ]
+  },
+  "MachineReadableFile": {
+    "name": "MachineReadableFile",
+    "fields": [
+      {
+        "name": "fileName",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "fileUrl",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "format",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sizeMb",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "publishedAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "RateEntry": {
+    "name": "RateEntry",
+    "fields": [
+      {
+        "name": "code",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "codeType",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "description",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "payer",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "negotiatedRate",
+        "kind": "number",
+        "required": true
+      },
+      {
+        "name": "setting",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "NegotiatedRateTest": {
+    "name": "NegotiatedRateTest",
+    "fields": [
+      {
+        "name": "testName",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "payer",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "expectedCount",
+        "kind": "number",
+        "required": true,
+        "integer": true,
+        "min": 0
+      },
+      {
+        "name": "foundCount",
+        "kind": "number",
+        "required": true,
+        "integer": true,
+        "min": 0
+      },
+      {
+        "name": "result",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "runAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "PercentileCheck": {
+    "name": "PercentileCheck",
+    "fields": [
+      {
+        "name": "payer",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "code",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "p10Amount",
+        "kind": "number",
+        "required": true,
+        "min": 0
+      },
+      {
+        "name": "medianAmount",
+        "kind": "number",
+        "required": true,
+        "min": 0
+      },
+      {
+        "name": "p90Amount",
+        "kind": "number",
+        "required": true,
+        "min": 0
+      },
+      {
+        "name": "result",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "CodeNormalization": {
+    "name": "CodeNormalization",
+    "fields": [
+      {
+        "name": "rawCode",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "normalizedCode",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "codeSystem",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "issue",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "processedAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "AccessibilityCheck": {
+    "name": "AccessibilityCheck",
+    "fields": [
+      {
+        "name": "url",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "checkType",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "result",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "httpStatus",
+        "kind": "number",
+        "required": true,
+        "integer": true
+      },
+      {
+        "name": "checkedAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "blocker",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "Attestation": {
+    "name": "Attestation",
+    "fields": [
+      {
+        "name": "period",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "executive",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "statement",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "signedAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "ipAddress",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "CmsWarning": {
+    "name": "CmsWarning",
+    "fields": [
+      {
+        "name": "reference",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "violation",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "severity",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "receivedAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "deadline",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "CorrectiveAction": {
+    "name": "CorrectiveAction",
+    "fields": [
+      {
+        "name": "warningRef",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "action",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "owner",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "dueDate",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "evidenceRef",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "BenchmarkReport": {
+    "name": "BenchmarkReport",
+    "fields": [
+      {
+        "name": "period",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "payer",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "codeSet",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "avgRate",
+        "kind": "number",
+        "required": true
+      },
+      {
+        "name": "peerDeltaPct",
+        "kind": "number",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  },
+  "ValidationRun": {
+    "name": "ValidationRun",
+    "fields": [
+      {
+        "name": "runType",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "checksPassed",
+        "kind": "number",
+        "required": true,
+        "integer": true
+      },
+      {
+        "name": "checksFailed",
+        "kind": "number",
+        "required": true,
+        "integer": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "startedAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "triggeredBy",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "hospitalId",
+        "kind": "string",
+        "required": false,
+        "relation": "Hospital"
+      }
+    ],
+    "parent": {
+      "field": "hospitalId",
+      "entity": "Hospital"
+    }
+  }
+}
