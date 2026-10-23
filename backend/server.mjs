@@ -8,6 +8,9 @@ import helmet from 'helmet';
 import jwt from 'jsonwebtoken';
 import pg from 'pg';
 import { mountOperationalRecordActions, recordPermissions } from './operationalRecordActions.mjs';
+import { mountTasks } from './tasks.mjs';
+import { filterRecords, recordsToCsv, recordsToJson } from './listTools.mjs';
+import { buildInsights } from './aiInsights.mjs';
 
 const backendRoot = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.dirname(backendRoot);
@@ -157,6 +160,7 @@ export function createApp() {
   });
   app.use('/api', auth);
   mountOperationalRecordActions(app, { pool, config, identifier, audit });
+  mountTasks(app, { pool, audit });
   app.get('/api/app', (req, res) => res.json({ ...config, user: req.user, ai: aiStatus() , recordPermissions: recordPermissions(req.user) }));
   app.get('/api/dashboard', async (_req, res) => {
     const [records, attention, recent, analyses] = await Promise.all([
@@ -207,9 +211,20 @@ export function createApp() {
     res.status(409).json({error:'Use the primary application review and domain tools. This action has not been performed.', status:'not_performed'});
   });
   app.get('/api/workflows', (_req, res) => res.json({ items: config.workflows }));
+  app.get('/api/records/export', async (req, res) => {
+    const result = req.query.workflow ? await pool.query('SELECT * FROM workflow_cases WHERE workflow_id=$1 ORDER BY due_date', [req.query.workflow]) : await pool.query('SELECT * FROM workflow_cases ORDER BY due_date');
+    const rows = filterRecords(result.rows, { q: req.query.q, status: req.query.status, risk: req.query.risk });
+    if (String(req.query.format || 'csv').toLowerCase() === 'json') { res.setHeader('Content-Disposition', 'attachment; filename="records.json"'); return res.json({ items: rows }); }
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8'); res.setHeader('Content-Disposition', 'attachment; filename="records.csv"');
+    res.send(recordsToCsv(rows, ["id","workflow_id","reference","title","status","owner","risk","due_date","amount"]));
+  });
+  app.get('/api/records/insights', async (_req, res) => {
+    const result = await pool.query('SELECT * FROM workflow_cases ORDER BY due_date');
+    res.json({ insights: buildInsights(result.rows, 'Workflow queue'), aiGenerated: false, source: 'deterministic-fallback' });
+  });
   app.get('/api/records', async (req, res) => {
     const result = req.query.workflow ? await pool.query('SELECT * FROM workflow_cases WHERE workflow_id=$1 ORDER BY due_date', [req.query.workflow]) : await pool.query('SELECT * FROM workflow_cases ORDER BY due_date');
-    res.json({ items: result.rows });
+    res.json({ items: filterRecords(result.rows, { q: req.query.q, status: req.query.status, risk: req.query.risk }) });
   });
   app.get('/api/operations', (_req, res) => res.json({ items: config.operations }));
   app.get('/api/operation-records', async (req, res) => {
